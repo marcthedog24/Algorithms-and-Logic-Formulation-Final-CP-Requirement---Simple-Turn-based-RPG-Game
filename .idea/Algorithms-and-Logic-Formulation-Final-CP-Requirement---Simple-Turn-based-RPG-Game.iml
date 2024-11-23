@@ -1,352 +1,337 @@
 import java.util.Scanner;
 import java.util.Random;
 
-
 public class Main { //it's better on intelliJ mmmm spaghetti code
-   public static void main(String[] args) {
-       Scanner sc = new Scanner(System.in);
-       Random random = new Random();
-       //starting text
-       String dialogue = "An outsider wishes to join the fray.... who could this daring challenger be?" ;
-       int textDelay = 40;
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Random random = new Random();
+        //starting text
+        String dialogue = "An outsider wishes to join the fray.... who could this daring challenger be?" ;
+        int textDelay = 40;
 
+        String [] chosenRoles = {"warrior ", "assassin ", "marksman "}; // wanted to use an array but I have no idea how to use it here ahahah
+        double playerTotalHealth = 0, playerHealth = 0, playerDamage = 0, enemyDamage = 0, playerArmor = 0, enemyArmor = 0;
+        //class selection
+        boolean restart = true;
+        boolean continueFighting = true;
+        boolean classSelection = true; //loop for role selection
+        boolean isWarrior = true; // character role to certain warrior skills
+        boolean isAssassin = true; // character role to certain assassin skills
+        boolean isMarksman = true; // character role to certain marksman skills
+        boolean combat = true; // ability selection
+        //class abilities
+        boolean isBlocked = false; //warrior W ability condition
+        boolean isRiposted = false; //assassin W ability condition
+        boolean isSmoked = false; //marksman W ability condition
+        //
+        boolean battleFervor = false;// ult
+        boolean poisonDagger = false;// ult
+        boolean deadEye = false; //ult
+        //
+        boolean ultimateAvailable = true; // available for all class to be used only once
+        System.out.println();
+        printWithDelay(dialogue, textDelay);
+        System.out.println();
+        String userName = sc.nextLine();
+    while(restart) {
+        while (classSelection) {
+            System.out.println("Pick a class:");
+            System.out.println("A. Warrior \nB. Assassin \nC. Marksman \n");
+            char role = sc.next().charAt(0);
 
-       String [] chosenRoles = {"warrior ", "assassin ", "marksman "}; // wanted to use an array but I have no idea how to use it here ahahah
-       double playerTotalHealth = 0, playerHealth = 0, playerDamage = 0, enemyDamage = 0, playerArmor = 0, enemyArmor = 0;
-       //class selection
-       boolean restart = true;
-       boolean continueFighting = true;
-       boolean classSelection = true; //loop for role selection
-       boolean isWarrior = true; // character role to certain warrior skills
-       boolean isAssassin = true; // character role to certain assassin skills
-       boolean isMarksman = true; // character role to certain marksman skills
-       boolean combat = true; // ability selection
-       //class abilities
-       boolean isBlocked = false; //warrior W ability condition
-       boolean isRiposted = false; //assassin W ability condition
-       boolean isSmoked = false; //marksman W ability condition
-       //
-       boolean battleFervor = false;// ult
-       boolean poisonDagger = false;// ult
-       boolean deadEye = false; //ult
-       //
-       boolean ultimateAvailable = true; // available for all class to be used only once
-       System.out.println();
-       printWithDelay(dialogue, textDelay);
-       System.out.println();
-       String userName = sc.nextLine();
-   while(restart) {
-       while (classSelection) {
-           System.out.println("Pick a class:");
-           System.out.println("A. Warrior \nB. Assassin \nC. Marksman \n");
-           char role = sc.next().charAt(0);
+            switch (role) {
+                case 'a':
+                    System.out.println();
+                    warrior();
+                    System.out.println(userName + ", the " + chosenRoles[0] + "has entered the arena!!!!");
+                    playerHealth = 160;
+                    playerArmor = 0.10 + (0.06 * random.nextDouble());
+                    isAssassin = false;
+                    isMarksman = false;
+                    classSelection = false;
+                    break;
+                case 'b':
+                    System.out.println();
+                    assassin();
+                    System.out.println(userName + ", the " + chosenRoles[1] + "has entered the arena!!!!");
+                    playerHealth = 130;
+                    playerArmor = 0.16 + (0.08 * random.nextDouble());
+                    isWarrior = false;
+                    isMarksman = false;
+                    classSelection = false;
+                    break;
+                case 'c':
+                    System.out.println();
+                    marksman();
+                    System.out.println(userName + ", the " + chosenRoles[2] + "has entered the arena!!!!");
+                    playerHealth = 145;
+                    playerArmor = 0.12 + (0.06 * random.nextDouble());
+                    isWarrior = false;
+                    isAssassin = false;
+                    classSelection = false;
+                    break;
+                default:
+                    System.out.println("Invalid input, please choose a role.");
+            }
+        }
+        continueFighting = true;
+        while (continueFighting) {
+            playerTotalHealth = playerHealth;
+            int enemyHealthGenerator = random.nextInt((18 - 10) + 1) + 10;
+            double enemyHealth = enemyHealthGenerator * 10.0;
+            double enemyTotalHealth = enemyHealth;
+            enemyArmor = 0.08 + (0.08 * random.nextDouble());
+            int turn = 1;
 
+            while (true) {
+                System.out.println("\n\n\n\n\n\n                                        [[ Turn: " + turn + " ]]\n");
+                while (combat) {
+                    if (ultimateAvailable) {
+                        System.out.println(" [Q] - Quick Attack || [W] - Defensive Ability || [E] - Healing Potion || [R] - Ultimate Skill\n ");
+                    } else {
+                        System.out.println(" [Q] - Quick Attack || [W] - Defensive Ability || [E] - Healing Potion || [̶R̶]̶ -̶ U̶l̶t̶i̶m̶a̶t̶e̶ S̶k̶i̶l̶l̶\n ");
+                    }
+                    char attack = sc.next().charAt(0);
 
-           switch (role) {
-               case 'a':
-                   System.out.println();
-                   warrior();
-                   System.out.println(userName + ", the " + chosenRoles[0] + "has entered the arena!!!!");
-                   playerHealth = 160;
-                   playerArmor = 0.10 + (0.06 * random.nextDouble());
-                   isAssassin = false;
-                   isMarksman = false;
-                   classSelection = false;
-                   break;
-               case 'b':
-                   System.out.println();
-                   assassin();
-                   System.out.println(userName + ", the " + chosenRoles[1] + "has entered the arena!!!!");
-                   playerHealth = 130;
-                   playerArmor = 0.16 + (0.08 * random.nextDouble());
-                   isWarrior = false;
-                   isMarksman = false;
-                   classSelection = false;
-                   break;
-               case 'c':
-                   System.out.println();
-                   marksman();
-                   System.out.println(userName + ", the " + chosenRoles[2] + "has entered the arena!!!!");
-                   playerHealth = 145;
-                   playerArmor = 0.12 + (0.06 * random.nextDouble());
-                   isWarrior = false;
-                   isAssassin = false;
-                   classSelection = false;
-                   break;
-               default:
-                   System.out.println("Invalid input, please choose a role.");
-           }
-       }
-       continueFighting = true;
-       while (continueFighting) {
-           playerTotalHealth = playerHealth;
-           int enemyHealthGenerator = random.nextInt((18 - 10) + 1) + 10;
-           double enemyHealth = enemyHealthGenerator * 10.0;
-           double enemyTotalHealth = enemyHealth;
-           enemyArmor = 0.08 + (0.08 * random.nextDouble());
-           int turn = 1;
+                    switch (attack) {
+                        case 'q':
+                            if (isWarrior) {
+                                if (battleFervor) {
+                                    playerDamage = 140 + (60 * random.nextDouble());
+                                    playerArmor = 0.08 + (0.08 * random.nextDouble());
+                                } else {
+                                    playerDamage = 95 + (40 * random.nextDouble());
+                                }
+                            } else if (isAssassin) {
+                                playerDamage = 120 + (30 * random.nextDouble());
+                            } else if (isMarksman) {
+                                playerDamage = 110 + (10 * random.nextDouble());
+                            }
+                            System.out.println("You initiate an attack...\n");
+                            combat = false;
+                            break;
 
+                        case 'w':
+                            if (isWarrior) {
+                                isBlocked = true;
+                            } else if (isAssassin) {
+                                isRiposted = true;
+                            } else if (isMarksman) {
+                                isSmoked = true;
+                            }
+                            combat = false;
+                            break;
 
-           while (true) {
-               System.out.println("\n\n\n\n\n\n                                        [[ Turn: " + turn + " ]]\n");
-               while (combat) {
-                   if (ultimateAvailable) {
-                       System.out.println(" [Q] - Quick Attack || [W] - Defensive Ability || [E] - Healing Potion || [R] - Ultimate Skill\n ");
-                   } else {
-                       System.out.println(" [Q] - Quick Attack || [W] - Defensive Ability || [E] - Healing Potion || [̶R̶]̶ -̶ U̶l̶t̶i̶m̶a̶t̶e̶ S̶k̶i̶l̶l̶\n ");
-                   }
-                   char attack = sc.next().charAt(0);
+                        case 'e':
+                            if (playerHealth < 80) {
+                                int randomHeal = random.nextInt(16) + 10;
+                                playerHealth += randomHeal;
+                                System.out.println("You've healed for " + randomHeal + " amount!\n");
+                                combat = false;
+                                break;
+                            } else {
+                                System.out.println("You're still quite healthy...\n");
+                                break;
+                            }
 
+                        case 'r':
+                            if (turn <= 8) {
+                                System.out.println("Ultimate skill is locked until turn 8.\n");
+                            } else if (!ultimateAvailable) {
+                                System.out.println("Ultimate skill has already been used.\n");
+                            } else if (ultimateAvailable) {
+                                if (isWarrior) {
+                                    battleFervor = true;
+                                    playerHealth -= 20;
+                                    System.out.println("You've sacrificed 20 of your remaining health for a permanent advantage...\n");
+                                    ultimateAvailable = false;
+                                    combat = false;
+                                } else if (isAssassin) {
+                                    if (!poisonDagger) {
+                                        poisonDagger = true;
+                                        System.out.println("You've inflicted deadly poison. The enemy will permanently suffer for as it lives.\n");
+                                        ultimateAvailable = false;
+                                        combat = false;
+                                    }
+                                } else if (isMarksman) {
+                                    deadEye = true;
+                                    System.out.println("You use a special rifle and military grade ammunition and take aim at the enemy....\n");
+                                    ultimateAvailable = false;
+                                    combat = false;
+                                }
+                            }
+                    }
+                }
+                int enemyActions = random.nextInt(102) + 1;
 
-                   switch (attack) {
-                       case 'q':
-                           if (isWarrior) {
-                               if (battleFervor) {
-                                   playerDamage = 140 + (60 * random.nextDouble());
-                                   playerArmor = 0.08 + (0.08 * random.nextDouble());
-                               } else {
-                                   playerDamage = 95 + (40 * random.nextDouble());
-                               }
-                           } else if (isAssassin) {
-                               playerDamage = 120 + (30 * random.nextDouble());
-                           } else if (isMarksman) {
-                               playerDamage = 110 + (10 * random.nextDouble());
-                           }
-                           System.out.println("You initiate an attack...\n");
-                           combat = false;
-                           break;
+                if (isAssassin) { // assassin ult perma poison
+                    if (poisonDagger) {
+                        enemyHealth -= 8;
+                    }
+                }
+                if (enemyActions > 1 && enemyActions < 52) { //enemy attack
+                    System.out.println("The enemy responds with an attack!");
 
+                    if (isBlocked) { //warrior defensive skill
+                        enemyDamage = 0.45 * (80 + (60 * random.nextDouble()));
+                        playerHealth = playerHealth - (enemyDamage * playerArmor);
+                        System.out.println("You've used a shield to absorb the enemy's blow!");
+                        System.out.println("\n\n");
+                        System.out.println("Enemy HP: " + Math.round(enemyHealth * 100.0) / 100.0 + "/" + enemyTotalHealth);
+                        System.out.println("\nEnemy dealt " + Math.round(enemyDamage * playerArmor * 100.0) / 100.0 + " damage !!!");
+                        System.out.println("Your HP: " + Math.round(playerHealth * 100.0) / 100.0 + "/" + playerTotalHealth);
+                        isBlocked = false;
+                    } else if (isRiposted) { //assassin defensive skill
+                        enemyDamage = 1.25 * (80 + (60 * random.nextDouble()));
+                        enemyHealth = enemyHealth - (enemyDamage * enemyArmor);
+                        System.out.println("You've riposted to counter the enemy's attack! You eat some to give some!");
+                        System.out.println("\n\n");
+                        System.out.println("Enemy HP: " + Math.round(enemyHealth * 100.0) / 100.0 + "/" + enemyTotalHealth);
+                        System.out.println("\nEnemy reflected " + Math.round(enemyDamage * playerArmor * 100.0) / 100.0 + " damage onto themselves !!!");
+                        enemyDamage = 0.60 * (80 + (60 * random.nextDouble()));
+                        playerHealth = playerHealth - (enemyDamage * playerArmor);
+                        System.out.println("Your HP: " + Math.round(playerHealth * 100.0) / 100.0 + "/" + playerTotalHealth);
+                        isRiposted = false;
+                    } else if (isSmoked) { //marksman defensive skill
+                        enemyDamage = 0 * (80 + (60 * random.nextDouble()));
+                        playerHealth = playerHealth - (enemyDamage * playerArmor);
+                        System.out.println("You've used a smoke bomb to obstruct the vision of the enemy!");
+                        System.out.println("\n\n");
+                        System.out.println("Enemy HP: " + Math.round(enemyHealth * 100.0) / 100.0 + "/" + enemyTotalHealth);
+                        System.out.println("\nEnemy dealt " + Math.round(enemyDamage * playerArmor * 100.0) / 100.0 + " damage !!!");
+                        System.out.println("Your HP: " + Math.round(playerHealth * 100.0) / 100.0 + "/" + playerTotalHealth);
+                        isSmoked = false;
+                    } else if (deadEye) {
+                        playerDamage = (200 + (60 * random.nextDouble()));
+                        enemyDamage = 80 + (60 * random.nextDouble());
+                        playerHealth = playerHealth - (enemyDamage * playerArmor);
+                        enemyHealth = enemyHealth - (playerDamage * enemyArmor);
+                        System.out.println("\n\nYou've pierced through the enemy's armor for " + Math.round(playerDamage * enemyArmor * 100.0) / 100.0 + " damage !!!!");
+                        System.out.println("Enemy HP: " + Math.round(enemyHealth * 100.0) / 100.0 + "/" + enemyTotalHealth);
+                        System.out.println("\nEnemy dealt " + Math.round(enemyDamage * playerArmor * 100.0) / 100.0 + " damage !!!!");
+                        System.out.println("Your HP: " + Math.round(playerHealth * 100.0) / 100.0 + "/" + playerTotalHealth);
+                        deadEye = false;
+                    } else { //if player uses Q while enemy attacks
+                        enemyDamage = 80 + (60 * random.nextDouble());
+                        playerHealth = playerHealth - (enemyDamage * playerArmor);
+                        enemyHealth = enemyHealth - (playerDamage * enemyArmor);
+                        System.out.println("\n\nYou've dealt " + Math.round(playerDamage * enemyArmor * 100.0) / 100.0 + " damage !!!!");
+                        System.out.println("Enemy HP: " + Math.round(enemyHealth * 100.0) / 100.0 + "/" + enemyTotalHealth);
+                        System.out.println("\nEnemy dealt " + Math.round(enemyDamage * playerArmor * 100.0) / 100.0 + " damage !!!!");
+                        System.out.println("Your HP: " + Math.round(playerHealth * 100.0) / 100.0 + "/" + playerTotalHealth);
+                    }
+                } else if (enemyActions > 51 && enemyActions < 102) { //enemy block
+                    System.out.println("The enemy switches to a defensive stance to block.");
+                    if (isBlocked) { //warrior defensive skill
+                        System.out.println("You try to anticipate the enemy's attack to block... Nothing happens.");
+                        System.out.println("\n\n");
+                        System.out.println("Enemy HP: " + Math.round(enemyHealth * 100.0) / 100.0 + "/" + enemyTotalHealth);
+                        System.out.println("\n");
+                        System.out.println("Your HP: " + Math.round(playerHealth * 100.0) / 100.0 + "/" + playerTotalHealth);
+                        isBlocked = false;
+                    } else if (isRiposted) { //assassin defensive skill
+                        System.out.println("You try to anticipate the enemy's attack to parry then counter... Nothing happens.");
+                        System.out.println("\n\n");
+                        System.out.println("Enemy HP: " + Math.round(enemyHealth * 100.0) / 100.0 + "/" + enemyTotalHealth);
+                        System.out.println("\n");
+                        System.out.println("Your HP: " + Math.round(playerHealth * 100.0) / 100.0 + "/" + playerTotalHealth);
+                        isRiposted = false;
+                    } else if (isSmoked) { //marksman defensive skill
+                        System.out.println("You try to blind the enemy when he's about to attack, but he shells up... Nothing happens.");
+                        System.out.println("\n\n");
+                        System.out.println("Enemy HP: " + Math.round(enemyHealth * 100.0) / 100.0 + "/" + enemyTotalHealth);
+                        System.out.println("\n");
+                        System.out.println("Your HP: " + Math.round(playerHealth * 100.0) / 100.0 + "/" + playerTotalHealth);
+                        isSmoked = false;
+                    } else if (deadEye) { //marksman ultimate
+                        playerDamage = (200 + (60 * random.nextDouble()));
+                        playerHealth = playerHealth - (enemyDamage * playerArmor);
+                        enemyHealth = enemyHealth - (playerDamage * enemyArmor);
+                        System.out.println("\n\nYou've pierced through the enemy's armor and defense for " + Math.round(playerDamage * enemyArmor * 100.0) / 100.0 + " damage !!!!");
+                        System.out.println("Enemy HP: " + Math.round(enemyHealth * 100.0) / 100.0 + "/" + enemyTotalHealth);
+                        System.out.println("\n");
+                        System.out.println("Your HP: " + Math.round(playerHealth * 100.0) / 100.0 + "/" + playerTotalHealth);
+                        deadEye = false;
+                    } else { //if player uses Q while enemy attacks
+                        playerDamage = 0 * (80 + (60 * random.nextDouble()));
+                        enemyHealth = enemyHealth - (playerDamage * enemyArmor);
+                        System.out.println("\n\nYou're attack got blocked by the enemy!");
+                        System.out.println("Enemy HP: " + Math.round(enemyHealth * 100.0) / 100.0 + "/" + enemyTotalHealth);
+                        System.out.println("\n");
+                        System.out.println("Your HP: " + Math.round(playerHealth * 100.0) / 100.0 + "/" + playerTotalHealth);
+                    }
+                }
 
-                       case 'w':
-                           if (isWarrior) {
-                               isBlocked = true;
-                           } else if (isAssassin) {
-                               isRiposted = true;
-                           } else if (isMarksman) {
-                               isSmoked = true;
-                           }
-                           combat = false;
-                           break;
+                turn++;
+                if (playerHealth <= 0) {
+                    String defeat = "The arena shall be your resting grounds......";
+                    System.out.println();
+                    printWithDelay(defeat, textDelay);
+                    gameOver();
+                    System.out.println("Would you like to try again? (Y/N)");
+                    char restartGame = sc.next().charAt(0);
 
+                    if (restartGame == 'Y' || restartGame == 'y') {
 
-                       case 'e':
-                           if (playerHealth < 80) {
-                               int randomHeal = random.nextInt(16) + 10;
-                               playerHealth += randomHeal;
-                               System.out.println("You've healed for " + randomHeal + " amount!\n");
-                               combat = false;
-                               break;
-                           } else {
-                               System.out.println("You're still quite healthy...\n");
-                               break;
-                           }
+                        ultimateAvailable = true;
+                        classSelection = true;
+                        continueFighting = false;
+                        poisonDagger = false;
+                        break;
 
+                    }
+                    else if (restartGame == 'N' || restartGame == 'n') {
+                        System.out.println("Thank you for playing!!!");
+                        continueFighting = false;
+                        restart = false;
+                        combat = false;
+                        break;
+                    }
+                }
+                else if (enemyHealth <= 0) {
+                    String victory = "You've slain your opposition!!!";
+                    System.out.println();
+                    printWithDelay(victory, textDelay);
+                    System.out.println("\nVictory!");
+                    victory();
+                    System.out.println("Would you like to continue fighting? (Y/N)");
+                    char restartGame = sc.next().charAt(0);
 
-                       case 'r':
-                           if (turn <= 8) {
-                               System.out.println("Ultimate skill is locked until turn 8.\n");
-                           } else if (!ultimateAvailable) {
-                               System.out.println("Ultimate skill has already been used.\n");
-                           } else if (ultimateAvailable) {
-                               if (isWarrior) {
-                                   battleFervor = true;
-                                   playerHealth -= 20;
-                                   System.out.println("You've sacrificed 20 of your remaining health for a permanent advantage...\n");
-                                   ultimateAvailable = false;
-                                   combat = false;
-                               } else if (isAssassin) {
-                                   if (!poisonDagger) {
-                                       poisonDagger = true;
-                                       System.out.println("You've inflicted deadly poison. The enemy will permanently suffer for as it lives.\n");
-                                       ultimateAvailable = false;
-                                       combat = false;
-                                   }
-                               } else if (isMarksman) {
-                                   deadEye = true;
-                                   System.out.println("You use a special rifle and military grade ammunition and take aim at the enemy....\n");
-                                   ultimateAvailable = false;
-                                   combat = false;
-                               }
-                           }
-                   }
-               }
-               int enemyActions = random.nextInt(102) + 1;
-
-
-               if (isAssassin) { // assassin ult perma poison
-                   if (poisonDagger) {
-                       enemyHealth -= 8;
-                   }
-               }
-               if (enemyActions > 1 && enemyActions < 52) { //enemy attack
-                   System.out.println("The enemy responds with an attack!");
-
-
-                   if (isBlocked) { //warrior defensive skill
-                       enemyDamage = 0.45 * (80 + (60 * random.nextDouble()));
-                       playerHealth = playerHealth - (enemyDamage * playerArmor);
-                       System.out.println("You've used a shield to absorb the enemy's blow!");
-                       System.out.println("\n\n");
-                       System.out.println("Enemy HP: " + Math.round(enemyHealth * 100.0) / 100.0 + "/" + enemyTotalHealth);
-                       System.out.println("\nEnemy dealt " + Math.round(enemyDamage * playerArmor * 100.0) / 100.0 + " damage !!!");
-                       System.out.println("Your HP: " + Math.round(playerHealth * 100.0) / 100.0 + "/" + playerTotalHealth);
-                       isBlocked = false;
-                   } else if (isRiposted) { //assassin defensive skill
-                       enemyDamage = 1.25 * (80 + (60 * random.nextDouble()));
-                       enemyHealth = enemyHealth - (enemyDamage * enemyArmor);
-                       enemyDamage = 0.60 * (80 + (60 * random.nextDouble()));
-                       playerHealth = playerHealth - (enemyDamage * playerArmor);
-                       System.out.println("You've riposted to counter the enemy's attack! You eat some to give some!");
-                       System.out.println("\n\n");
-                       System.out.println("Enemy HP: " + Math.round(enemyHealth * 100.0) / 100.0 + "/" + enemyTotalHealth);
-                       System.out.println("\nEnemy reflected " + Math.round(enemyDamage * playerArmor * 100.0) / 100.0 + " damage onto themselves !!!");
-                       System.out.println("Your HP: " + Math.round(playerHealth * 100.0) / 100.0 + "/" + playerTotalHealth);
-                       isRiposted = false;
-                   } else if (isSmoked) { //marksman defensive skill
-                       enemyDamage = 0 * (80 + (60 * random.nextDouble()));
-                       playerHealth = playerHealth - (enemyDamage * playerArmor);
-                       System.out.println("You've used a smoke bomb to obstruct the vision of the enemy!");
-                       System.out.println("\n\n");
-                       System.out.println("Enemy HP: " + Math.round(enemyHealth * 100.0) / 100.0 + "/" + enemyTotalHealth);
-                       System.out.println("\nEnemy dealt " + Math.round(enemyDamage * playerArmor * 100.0) / 100.0 + " damage !!!");
-                       System.out.println("Your HP: " + Math.round(playerHealth * 100.0) / 100.0 + "/" + playerTotalHealth);
-                       isSmoked = false;
-                   } else if (deadEye) {
-                       playerDamage = (200 + (60 * random.nextDouble()));
-                       enemyDamage = 80 + (60 * random.nextDouble());
-                       playerHealth = playerHealth - (enemyDamage * playerArmor);
-                       enemyHealth = enemyHealth - (playerDamage * enemyArmor);
-                       System.out.println("\n\nYou've pierced through the enemy's armor for " + Math.round(playerDamage * enemyArmor * 100.0) / 100.0 + " damage !!!!");
-                       System.out.println("Enemy HP: " + Math.round(enemyHealth * 100.0) / 100.0 + "/" + enemyTotalHealth);
-                       System.out.println("\nEnemy dealt " + Math.round(enemyDamage * playerArmor * 100.0) / 100.0 + " damage !!!!");
-                       System.out.println("Your HP: " + Math.round(playerHealth * 100.0) / 100.0 + "/" + playerTotalHealth);
-                       deadEye = false;
-                   } else { //if player uses Q while enemy attacks
-                       enemyDamage = 80 + (60 * random.nextDouble());
-                       playerHealth = playerHealth - (enemyDamage * playerArmor);
-                       enemyHealth = enemyHealth - (playerDamage * enemyArmor);
-                       System.out.println("\n\nYou've dealt " + Math.round(playerDamage * enemyArmor * 100.0) / 100.0 + " damage !!!!");
-                       System.out.println("Enemy HP: " + Math.round(enemyHealth * 100.0) / 100.0 + "/" + enemyTotalHealth);
-                       System.out.println("\nEnemy dealt " + Math.round(enemyDamage * playerArmor * 100.0) / 100.0 + " damage !!!!");
-                       System.out.println("Your HP: " + Math.round(playerHealth * 100.0) / 100.0 + "/" + playerTotalHealth);
-                   }
-               } else if (enemyActions > 51 && enemyActions < 102) { //enemy block
-                   System.out.println("The enemy switches to a defensive stance to block.");
-                   if (isBlocked) { //warrior defensive skill
-                       System.out.println("You try to anticipate the enemy's attack to block... Nothing happens.");
-                       System.out.println("\n\n");
-                       System.out.println("Enemy HP: " + Math.round(enemyHealth * 100.0) / 100.0 + "/" + enemyTotalHealth);
-                       System.out.println("\n");
-                       System.out.println("Your HP: " + Math.round(playerHealth * 100.0) / 100.0 + "/" + playerTotalHealth);
-                       isBlocked = false;
-                   } else if (isRiposted) { //assassin defensive skill
-                       System.out.println("You try to anticipate the enemy's attack to parry then counter... Nothing happens.");
-                       System.out.println("\n\n");
-                       System.out.println("Enemy HP: " + Math.round(enemyHealth * 100.0) / 100.0 + "/" + enemyTotalHealth);
-                       System.out.println("\n");
-                       System.out.println("Your HP: " + Math.round(playerHealth * 100.0) / 100.0 + "/" + playerTotalHealth);
-                       isRiposted = false;
-                   } else if (isSmoked) { //marksman defensive skill
-                       System.out.println("You try to blind the enemy when he's about to attack, but he shells up... Nothing happens.");
-                       System.out.println("\n\n");
-                       System.out.println("Enemy HP: " + Math.round(enemyHealth * 100.0) / 100.0 + "/" + enemyTotalHealth);
-                       System.out.println("\n");
-                       System.out.println("Your HP: " + Math.round(playerHealth * 100.0) / 100.0 + "/" + playerTotalHealth);
-                       isSmoked = false;
-                   } else if (deadEye) { //marksman ultimate
-                       playerDamage = (200 + (60 * random.nextDouble()));
-                       playerHealth = playerHealth - (enemyDamage * playerArmor);
-                       enemyHealth = enemyHealth - (playerDamage * enemyArmor);
-                       System.out.println("\n\nYou've pierced through the enemy's armor and defense for " + Math.round(playerDamage * enemyArmor * 100.0) / 100.0 + " damage !!!!");
-                       System.out.println("Enemy HP: " + Math.round(enemyHealth * 100.0) / 100.0 + "/" + enemyTotalHealth);
-                       System.out.println("\n");
-                       System.out.println("Your HP: " + Math.round(playerHealth * 100.0) / 100.0 + "/" + playerTotalHealth);
-                       deadEye = false;
-                   } else { //if player uses Q while enemy attacks
-                       playerDamage = 0 * (80 + (60 * random.nextDouble()));
-                       enemyHealth = enemyHealth - (playerDamage * enemyArmor);
-                       System.out.println("\n\nYou're attack got blocked by the enemy!");
-                       System.out.println("Enemy HP: " + Math.round(enemyHealth * 100.0) / 100.0 + "/" + enemyTotalHealth);
-                       System.out.println("\n");
-                       System.out.println("Your HP: " + Math.round(playerHealth * 100.0) / 100.0 + "/" + playerTotalHealth);
-                   }
-               }
-
-
-               turn++;
-               if (playerHealth <= 0) {
-                   String defeat = "The arena shall be your resting grounds......";
-                   System.out.println();
-                   printWithDelay(defeat, textDelay);
-                   gameOver();
-                   System.out.println("Would you like to try again? (Y/N)");
-                   char restartGame = sc.next().charAt(0);
-
-
-                   if (restartGame == 'Y' || restartGame == 'y') {
-
-
-                       ultimateAvailable = true;
-                       classSelection = true;
-                       continueFighting = false;
-                       poisonDagger = false;
-                       break;
-
-
-                   }
-                   else if (restartGame == 'N' || restartGame == 'n') {
-                       System.out.println("Thank you for playing!!!");
-                       continueFighting = false;
-                       restart = false;
-                       combat = false;
-                       break;
-                   }
-               }
-               else if (enemyHealth <= 0) {
-                   String victory = "You've slain your opposition!!!";
-                   System.out.println();
-                   printWithDelay(victory, textDelay);
-                   System.out.println("\nVictory!");
-                   victory();
-                   System.out.println("Would you like to continue fighting? (Y/N)");
-                   char restartGame = sc.next().charAt(0);
-
-
-                   if (restartGame == 'Y' || restartGame == 'y') {
-                       playerHealth += 50;
-                       enemyHealthGenerator = random.nextInt((18 - 10) + 1) + 10;
-                       enemyHealth = enemyHealthGenerator * 10.0;
-                       enemyTotalHealth = enemyHealth;
-                       enemyArmor = 0.08 + (0.08 * random.nextDouble());
-                       turn = 1;
-                       ultimateAvailable = true;
-                       poisonDagger = false;
-                       System.out.println("Your remaining health carries over.... " + Math.round(playerHealth * 100.0) / 100.0  + "/" + playerTotalHealth);
-                   }
-                   else if (restartGame == 'N' || restartGame == 'n') {
-                       System.out.println("Thank you for playing!!!");
-                       continueFighting = false;
-                       restart = false;
-                       break;
-                   }
-               }
-               combat = true;
-           }
-       }
-   }
-   }
-   public static void printWithDelay(String text, int delay) {
-       for (char c : text.toCharArray()) {
-           System.out.print(c);
-           try {
-               Thread.sleep(delay);
-           } catch (InterruptedException e) {
-               Thread.currentThread().interrupt();
-           }
-       }
-   }
-   public static void marksman() {
-       String gun = """
+                    if (restartGame == 'Y' || restartGame == 'y') {
+                        playerHealth += 50;
+                        enemyHealthGenerator = random.nextInt((18 - 10) + 1) + 10;
+                        enemyHealth = enemyHealthGenerator * 10.0;
+                        enemyTotalHealth = enemyHealth;
+                        enemyArmor = 0.08 + (0.08 * random.nextDouble());
+                        turn = 1;
+                        ultimateAvailable = true;
+                        poisonDagger = false;
+                        System.out.println("Your remaining health carries over.... " + Math.round(playerHealth * 100.0) / 100.0  + "/" + playerTotalHealth);
+                    }
+                    else if (restartGame == 'N' || restartGame == 'n') {
+                        System.out.println("Thank you for playing!!!");
+                        continueFighting = false;
+                        restart = false;
+                        break;
+                    }
+                }
+                combat = true;
+            }
+        }
+    }
+    }
+    public static void printWithDelay(String text, int delay) {
+        for (char c : text.toCharArray()) {
+            System.out.print(c);
+            try {
+                Thread.sleep(delay);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
+    public static void marksman() {
+        String gun = """
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡠⠚⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣧⡈⠳⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡴⠋⣠⠾⡍⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣞⠙⢦⡈⠑⢦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠞⢁⡤⠚⢁⠴⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -369,13 +354,12 @@ public class Main { //it's better on intelliJ mmmm spaghetti code
 ⣠⠋⡜⢠⡰⢰⠁⣼⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢷⠀⢣⠀⢰⠣⡙⣄
 ⠙⢦⣙⠈⢡⠃⢰⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣧⠈⢆⠼⢀⡇⢈
 ⠀⠀⠈⠙⠒⠤⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣆⠈⣀⡬⠖⠉
-       """;
+        """;
 
-
-       System.out.println(gun);
-   }
-   public static void assassin() {
-       String dagger = """
+        System.out.println(gun);
+    }
+    public static void assassin() {
+        String dagger = """
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠰⠾⠟⠃⠀⠀⠀⠀⠀⠀⠀⠀⠉⣉⣉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠘⠻⠷⠆⠀
 ⠀⠐⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⣿⠀⠀⠀
@@ -391,13 +375,12 @@ public class Main { //it's better on intelliJ mmmm spaghetti code
 ⠀⠀⠀⠀⠀⠈⢿⣶⣿⡇⠀⠀⢻⣿⣿⡏⠀⠀⢸⣿⣶⡿⠁⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠙⣿⡇⠀⠀⠈⢿⡟⠀⠀⠀⢸⣿⠋⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠈⠁⠀⠀⠀⠈⠁⠀⠀⠀⠈⠁⠀⠀⠀
-       """;
+        """;
 
-
-       System.out.println(dagger);
-   }
-   public static void warrior() {
-       String axe = """
+        System.out.println(dagger);
+    }
+    public static void warrior() {
+        String axe = """
 ⠀⡠⡠⠀⠀⠀⠀⢀⠄⠀⠀⠀⡠⠀⢀⠄⠀⠀⠀⡠⠂⠀⠀⠀⢀⠄⡠⠀⠀⠀
 ⣀⠈⠀⠀⠐⢀⣔⣵⣄⠀⡠⠊⢀⠔⠁⠀⠀⡠⠊⠀⢀⢴⣧⣔⠡⠊⠀⠀⠀⢀
 ⣿⣿⣦⣦⣴⣷⣿⣿⣿⣦⡀⠔⠁⠀⠀⡠⠊⠀⠀⠀⣰⣿⣿⣿⣶⣦⣴⣴⣾⣿
@@ -413,57 +396,55 @@ public class Main { //it's better on intelliJ mmmm spaghetti code
 ⠀⠔⡡⠊⠠⣢⣴⡿⠟⠁⠀⠀⡀⠀⢀⠔⠑⠁⠀⠠⠈⡹⣿⣦⣄⢀⠔⠁⡀⠀
 ⠀⠊⠀⠀⠀⢹⢿⡗⠁⠀⠀⠀⢀⠔⠕⠁⠀⡀⠀⡠⠊⠐⠹⢿⠗⠁⡠⠊⠀⠀
 ⠀⠀⠀⠀⠐⠁⠁⠀⠀⠈⠀⠐⠑⠀⠀⠀⠀⠀⠊⠀⠀⠀⠐⠁⠀⠊⠀⠀⠀⠀
-       """;
-       System.out.println(axe);
-   }
-   public static void gameOver() {
-       String gameOver = """
-       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀
-       ⠀⠀⠀⠀⠀⠀⠀⠀ ⢀⣀⠀⠀  ⣶⡆⠀⣰⣿⠇⣾⡿⠛⠉⠁
-        ⣠⣴⠾⠿⠿⠀⢀⣾⣿⣆⣀⣸⣿⣷⣾⣿⡿⢸⣿⠟⢓⠀⠀
-       ⣴⡟⠁⣀⣠⣤⠀⣼⣿⠾⣿⣻⣿⠃⠙⢫⣿⠃⣿⡿⠟⠛⠁⠀
-       ⢿⣝⣻⣿⡿⠋⠾⠟⠁⠀⠹⠟⠛⠀⠀⠈⠉⠀⠉⠀⠀⠀⠀⠀
-        ⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀⣀⢀⣠⣤⣴⣤⣄⠀
-       ⠀⠀⠀⠀⣀⣤⣤⢶⣤⠀⠀⢀⣴⢃⣿⠟⠋⢹⣿⣣⣴⡿⠋⠀
-       ⠀⠀⣰⣾⠟⠉⣿⡜⣿⡆⣴⡿⠁⣼⡿⠛⢃⣾⡿⠋⢻⣇⠀⠀
-        ⠐⣿⡁⢀⣠⣿⡇⢹⣿⡿⠁⢠⣿⠷⠟⠻⠟⠀⠀⠈⠛⠀⠀
-       ⠀⠀⠙⠻⠿⠟⠋⠀⠀⠙⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-       """;
+        """;
+        System.out.println(axe);
+    }
+    public static void gameOver() {
+        String gameOver = """
+        ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀
+        ⠀⠀⠀⠀⠀⠀⠀⠀ ⢀⣀⠀⠀  ⣶⡆⠀⣰⣿⠇⣾⡿⠛⠉⠁
+         ⣠⣴⠾⠿⠿⠀⢀⣾⣿⣆⣀⣸⣿⣷⣾⣿⡿⢸⣿⠟⢓⠀⠀
+        ⣴⡟⠁⣀⣠⣤⠀⣼⣿⠾⣿⣻⣿⠃⠙⢫⣿⠃⣿⡿⠟⠛⠁⠀
+        ⢿⣝⣻⣿⡿⠋⠾⠟⠁⠀⠹⠟⠛⠀⠀⠈⠉⠀⠉⠀⠀⠀⠀⠀
+         ⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀⣀⢀⣠⣤⣴⣤⣄⠀
+        ⠀⠀⠀⠀⣀⣤⣤⢶⣤⠀⠀⢀⣴⢃⣿⠟⠋⢹⣿⣣⣴⡿⠋⠀
+        ⠀⠀⣰⣾⠟⠉⣿⡜⣿⡆⣴⡿⠁⣼⡿⠛⢃⣾⡿⠋⢻⣇⠀⠀
+         ⠐⣿⡁⢀⣠⣿⡇⢹⣿⡿⠁⢠⣿⠷⠟⠻⠟⠀⠀⠈⠛⠀⠀
+        ⠀⠀⠙⠻⠿⠟⠋⠀⠀⠙⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        """;
 
+        System.out.println(gameOver);
+    }
+    public static void victory() {
+        String gigaChad = """
+        ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣾⠀
+        ⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⢂⠀⠀⠀⠀⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⠀
+        ⠀⠀⠀⠀⠀⠀⢀⡈⠛⠦⠀⠀⠀⠆⠀⠀⠀⠀⡀⠀⠐⠀⠀⠀⠀⠀⠀⡛⢱⣿⣿⠀
+        ⠀⠀⠀⠠⣤⣴⠝⢛⠂⠀⠀⣐⣤⣠⣤⣰⣤⣜⢀⠀⢀⠀⠀⠀⠀⠀⠀⡅⣸⣿⣿⠀
+        ⠀⠀⠀⠀⢖⣂⠄⡀⣤⣶⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⡀⠀⠁⠀⠀⠀⠀⣇⣿⣿⣿⠀
+        ⠀⠀⠀⠀⣤⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢿⣿⣿⣶⣦⠀⠀⠀⠀⢹⠹⣿⣿⠀
+        ⠀⠀⠀⣤⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⢟⣽⡪⠽⠛⡛⠻⣿⣷⠠⠀⠀⠀⠀⢻⣿⠀
+        ⠀⠀⠀⢦⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠁⣠⣶⣾⣷⣤⡘⢟⡣⠀⠀⠀⠀⠘⣿⠀
+        ⠀⠀⠀⡞⠿⢿⣿⣿⣿⣿⡿⣿⡿⠋⠀⣠⠾⣻⣽⠾⠻⣿⣿⡜⡷⡀⠀⠀⠀⢶⣿⠀
+        ⠀⠀⠀⢠⣶⣤⣄⣀⠉⠻⢿⣶⡏⣡⡾⠗⣩⡀⣀⣶⣶⣾⣿⣿⡸⣧⠀⣢⠄⠸⣿⠀
+        ⠀⠀⠀⠘⣿⠿⠛⠋⠋⠝⡃⣿⣿⣬⡻⣿⣿⣿⣿⣿⣿⣿⣿⣿⡄⢰⡹⣼⠀⢿⠀
+        ⠀⠀⠀⠀⣯⡰⣗⣴⣾⣿⢡⢹⣿⣎⢷⣽⣿⣿⣿⣿⣿⣿⣿⡁⢸⣛⡟⠀⣾⠀
+        ⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⡏⢸⣿⣿⣎⠿⣿⣿⣿⣿⣿⣿⡿⢹⣿⠀⠉⠀⣴⣿⠀
+        ⠀⠀⠀⠀⠸⣿⣿⣿⣿⣿⡟⣿⣿⣿⣿⣿⡌⣿⣿⣿⣿⣿⡟⢠⣿⣿⠀⠀⠀⠉⢸⠀
+        ⠀⠀⠀⠀⠀⠹⣿⣿⣿⣿⣏⠌⠋⣩⡶⣒⣵⣿⣿⣿⣿⣿⣷⣿⣿⣿⠀⠀⠀⠀⢸⠀
+        ⠀⠀⠀⠀⠀⠀⠈⠙⢛⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⣻⣿⣿⣿⣿⡟⡄⢀⠀⠀⠈⠀
+        ⠀⠀⠀⠀⠀⠀⠀⠀⠐⢝⢿⣿⡛⢯⡶⢶⣒⣛⣧⣾⢿⣿⣿⣿⡿⢡⣿⠈⢧⡀⠀⠀
+        ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡐⣶⣾⣿⣿⣿⠿⣻⣻⣿⣿⣿⡿⢡⣿⣿⡇⠆⢧⠀⠀
+        ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢨⣭⣭⣥⣶⣾⣿⣿⣿⣿⡟⣡⣿⣿⣿⣿⢰⢸⡖⠀
+        ⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⢊⡾⡁⠻⣿⣿⣿⣿⣿⣿⣿⠏⣰⣿⣿⣿⣿⣿⣼⡟⣿⠀
+        ⠀⠀⠀⠀⠀⠀⡠⣠⢳⣧⡺⠁⡄⣝⡻⠿⠿⠿⢛⣡⣾⣿⣿⣿⣿⣿⣿⢻⣧⣿⠀⠀⠀⠀
+        """;
 
-       System.out.println(gameOver);
-   }
-   public static void victory() {
-       String gigaChad = """
-       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣾⠀
-       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⢂⠀⠀⠀⠀⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⠀
-       ⠀⠀⠀⠀⠀⠀⢀⡈⠛⠦⠀⠀⠀⠆⠀⠀⠀⠀⡀⠀⠐⠀⠀⠀⠀⠀⠀⡛⢱⣿⣿⠀
-       ⠀⠀⠀⠠⣤⣴⠝⢛⠂⠀⠀⣐⣤⣠⣤⣰⣤⣜⢀⠀⢀⠀⠀⠀⠀⠀⠀⡅⣸⣿⣿⠀
-       ⠀⠀⠀⠀⢖⣂⠄⡀⣤⣶⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⡀⠀⠁⠀⠀⠀⠀⣇⣿⣿⣿⠀
-       ⠀⠀⠀⠀⣤⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢿⣿⣿⣶⣦⠀⠀⠀⠀⢹⠹⣿⣿⠀
-       ⠀⠀⠀⣤⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⢟⣽⡪⠽⠛⡛⠻⣿⣷⠠⠀⠀⠀⠀⢻⣿⠀
-       ⠀⠀⠀⢦⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠁⣠⣶⣾⣷⣤⡘⢟⡣⠀⠀⠀⠀⠘⣿⠀
-       ⠀⠀⠀⡞⠿⢿⣿⣿⣿⣿⡿⣿⡿⠋⠀⣠⠾⣻⣽⠾⠻⣿⣿⡜⡷⡀⠀⠀⠀⢶⣿⠀
-       ⠀⠀⠀⢠⣶⣤⣄⣀⠉⠻⢿⣶⡏⣡⡾⠗⣩⡀⣀⣶⣶⣾⣿⣿⡸⣧⠀⣢⠄⠸⣿⠀
-       ⠀⠀⠀⠘⣿⠿⠛⠋⠋⠝⡃⣿⣿⣬⡻⣿⣿⣿⣿⣿⣿⣿⣿⣿⡄⢰⡹⣼⠀⢿⠀
-       ⠀⠀⠀⠀⣯⡰⣗⣴⣾⣿⢡⢹⣿⣎⢷⣽⣿⣿⣿⣿⣿⣿⣿⡁⢸⣛⡟⠀⣾⠀
-       ⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⡏⢸⣿⣿⣎⠿⣿⣿⣿⣿⣿⣿⡿⢹⣿⠀⠉⠀⣴⣿⠀
-       ⠀⠀⠀⠀⠸⣿⣿⣿⣿⣿⡟⣿⣿⣿⣿⣿⡌⣿⣿⣿⣿⣿⡟⢠⣿⣿⠀⠀⠀⠉⢸⠀
-       ⠀⠀⠀⠀⠀⠹⣿⣿⣿⣿⣏⠌⠋⣩⡶⣒⣵⣿⣿⣿⣿⣿⣷⣿⣿⣿⠀⠀⠀⠀⢸⠀
-       ⠀⠀⠀⠀⠀⠀⠈⠙⢛⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⣻⣿⣿⣿⣿⡟⡄⢀⠀⠀⠈⠀
-       ⠀⠀⠀⠀⠀⠀⠀⠀⠐⢝⢿⣿⡛⢯⡶⢶⣒⣛⣧⣾⢿⣿⣿⣿⡿⢡⣿⠈⢧⡀⠀⠀
-       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡐⣶⣾⣿⣿⣿⠿⣻⣻⣿⣿⣿⡿⢡⣿⣿⡇⠆⢧⠀⠀
-       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢨⣭⣭⣥⣶⣾⣿⣿⣿⣿⡟⣡⣿⣿⣿⣿⢰⢸⡖⠀
-       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⢊⡾⡁⠻⣿⣿⣿⣿⣿⣿⣿⠏⣰⣿⣿⣿⣿⣿⣼⡟⣿⠀
-       ⠀⠀⠀⠀⠀⠀⡠⣠⢳⣧⡺⠁⡄⣝⡻⠿⠿⠿⢛⣡⣾⣿⣿⣿⣿⣿⣿⢻⣧⣿⠀⠀⠀⠀
-       """;
-
-
-       System.out.println(gigaChad);
-   }
-
+        System.out.println(gigaChad);
+    }
 
 }
+
 
 
 
